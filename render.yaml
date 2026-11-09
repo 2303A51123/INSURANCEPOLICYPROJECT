@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: insurance-policy-project-2303a51123
+    runtime: node
+    plan: free
+    buildCommand: npm ci --omit=dev
+    startCommand: node backend/server.js
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_ENV
+        value: production

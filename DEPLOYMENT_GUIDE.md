@@ -21,7 +21,7 @@
    ```bash
    npm test
    ```
-   *Expected Output: 10 Passed, 0 Failed.*
+   *Expected Output: 13 Passed, 0 Failed.*
 
 3. **Start the Application Server**:
    ```bash
@@ -44,7 +44,25 @@
 
 ---
 
-## 2. Docker Containerization Execution
+## 2. Render Deployment
+
+The root `render.yaml` defines a free Node.js web service. To deploy it:
+
+1. Sign in to the [Render Dashboard](https://dashboard.render.com/).
+2. Select **New > Blueprint** and connect this GitHub repository.
+3. Select the `main` branch and approve the Blueprint named
+   `insurance-policy-project-2303a51123`.
+4. Wait for the first deploy to finish, then open the service's `onrender.com`
+   URL. Render checks `/api/health` to verify the service is ready.
+
+The free service may spin down while idle. The app stores its JSON data on the
+service filesystem, which is not persistent across all redeploys or instance
+restarts; use persistent storage or a database before relying on it for real
+records. The included seed data is anonymized demonstration data.
+
+---
+
+## 3. Docker Containerization Execution
 
 ### Prerequisites
 - Docker Engine / Docker Desktop installed and running
@@ -89,7 +107,7 @@
 
 ---
 
-## 3. Multi-Container Orchestration with Docker Compose
+## 4. Multi-Container Orchestration with Docker Compose
 
 1. **Launch Full Multi-Container Stack (App + Redis + Named Volumes)**:
    ```bash
@@ -117,7 +135,7 @@
 
 ---
 
-## 4. Kubernetes Cluster Deployment (Minikube / Cloud K8s)
+## 5. Kubernetes Cluster Deployment (Minikube / Cloud K8s)
 
 ### Prerequisites
 - Kubernetes cluster (Minikube, Kind, k3s, EKS, AKS, or GKE)
