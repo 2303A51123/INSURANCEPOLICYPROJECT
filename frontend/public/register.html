@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Register | Insurance Policy and Claims Management System | PUVATI VAMSHI VARDHAN RAO (2303A51123)</title>
+  <link rel="stylesheet" href="auth.css">
+</head>
+<body>
+  <div class="auth-shell">
+
+    <!-- Brand panel -->
+    <aside class="brand-panel">
+      <span class="blob b1"></span><span class="blob b2"></span><span class="blob b3"></span>
+
+      <div class="brand-top">
+        <div class="logo-row">
+          <div class="logo-mark">🛡️</div>
+          <div>
+            <span class="logo-name">InsurSync</span><span class="logo-tag">v1.0 DevOps</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="brand-mid">
+        <h1>Insurance Policy and <span>Claims Management System</span></h1>
+        <ul class="feature-list">
+          <li><span class="ico">🛡️</span> Admin</li>
+          <li><span class="ico">💼</span> Policy Agent</li>
+          <li><span class="ico">👤</span> Policy Holder</li>
+          <li><span class="ico">⚖️</span> Claims Officer</li>
+        </ul>
+      </div>
+
+      <div class="brand-bottom">
+        <div class="student-badge">
+          <div class="who">
+            <strong>PUVATI VAMSHI VARDHAN RAO</strong>
+            <span class="dim mono">Enrolment: 2303A51123</span>
+          </div>
+          <div>
+            <strong>B.Tech IV-I Sem</strong>
+            <span class="dim">DevOps & Full Stack</span>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Form panel -->
+    <main class="form-panel">
+      <div class="card">
+        <div class="mobile-logo"><div class="logo-mark">🛡️</div> InsurSync</div>
+
+        <h2>Create your account</h2>
+        <p class="sub">Register to access the Insurance Policy and Claims Management System.</p>
+
+        <div id="alertBox" class="alert" role="alert"></div>
+
+        <form id="authForm" data-mode="register" novalidate>
+          <div class="field">
+            <label for="name">Full Name</label>
+            <div class="control">
+              <span class="lead">👤</span>
+              <input type="text" id="name" name="name" placeholder="Your full name" autocomplete="name" required>
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="email">Email</label>
+            <div class="control">
+              <span class="lead">✉️</span>
+              <input type="email" id="email" name="email" placeholder="you@example.com" autocomplete="email" required>
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="role">Role</label>
+            <div class="control">
+              <span class="lead">🎭</span>
+              <select id="role" name="role">
+                <option value="Admin">Admin (Full Control)</option>
+                <option value="Policy Agent">Policy Agent</option>
+                <option value="Policy Holder" selected>Policy Holder (Customer)</option>
+                <option value="Claims Officer">Claims Officer</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="row-2">
+            <div class="field">
+              <label for="password">Password</label>
+              <div class="control">
+                <span class="lead">🔒</span>
+                <input type="password" id="password" name="password" placeholder="Min. 6 characters" autocomplete="new-password" required>
+                <button type="button" class="toggle-pw" data-target="password" aria-label="Show password">👁️</button>
+              </div>
+            </div>
+            <div class="field">
+              <label for="confirm">Confirm</label>
+              <div class="control">
+                <span class="lead">🔐</span>
+                <input type="password" id="confirm" name="confirm" placeholder="Repeat password" autocomplete="new-password" required>
+                <button type="button" class="toggle-pw" data-target="confirm" aria-label="Show password">👁️</button>
+              </div>
+            </div>
+          </div>
+
+          <div id="strength" class="strength" style="margin:-6px 0 18px;">
+            <div class="bars"><span></span><span></span><span></span><span></span></div>
+            <div class="label"></div>
+          </div>
+
+          <button type="submit" id="submitBtn" class="btn"><span class="spinner"></span><span>Create Account</span></button>
+        </form>
+
+        <p class="switch">Already registered? <a href="login.html">Sign in</a></p>
+        <p class="foot-note">InsurSync · Insurance Policy and Claims Management System</p>
+      </div>
+    </main>
+  </div>
+  <script src="auth.js"></script>
+</body>
+</html>

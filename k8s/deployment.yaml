@@ -1,0 +1,72 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: insurance-deployment
+  namespace: insurance-system
+  labels:
+    app: insurance-app
+    tier: frontend-backend
+    student: puvati-vamshi-vardhan-rao
+    enrolment: "2303a51123"
+spec:
+  replicas: 2
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  selector:
+    matchLabels:
+      app: insurance-app
+  template:
+    metadata:
+      labels:
+        app: insurance-app
+    spec:
+      containers:
+        - name: insurance-container
+          image: insurance-policy-claims-app:v1.0
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 3000
+              name: http
+          envFrom:
+            - configMapRef:
+                name: insurance-config
+            - secretRef:
+                name: insurance-secret
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "128Mi"
+            limits:
+              cpu: "500m"
+              memory: "512Mi"
+          livenessProbe:
+            httpGet:
+              path: /api/health
+              port: 3000
+            initialDelaySeconds: 15
+            periodSeconds: 20
+            timeoutSeconds: 3
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /api/health
+              port: 3000
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            timeoutSeconds: 2
+            successThreshold: 1
+            failureThreshold: 2
+          volumeMounts:
+            - name: persistent-storage
+              mountPath: /app/backend/data
+            - name: uploads-storage
+              mountPath: /app/backend/uploads
+      volumes:
+        - name: persistent-storage
+          persistentVolumeClaim:
+            claimName: insurance-data-pvc
+        - name: uploads-storage
+          emptyDir: {}

@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: insurance-system
+  labels:
+    app.kubernetes.io/name: insurance-policy-claims-system
+    app.kubernetes.io/part-of: devops-portfolio
+    app.kubernetes.io/managed-by: kubernetes
+    student: puvati-vamshi-vardhan-rao
+    enrolment: "2303a51123"

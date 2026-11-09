@@ -1,0 +1,65 @@
+# ==============================================================================
+# Docker Compose: Insurance Policy and Claims Management System
+# Student: PUVATI VAMSHI VARDHAN RAO | Enrolment: 2303A51123
+# DevOps & Full Stack Course Project
+# ==============================================================================
+
+version: '3.8'
+
+services:
+  # Main Full-Stack Application Service
+  insurance-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: insurance-policy-claims-app:v1.0
+    container_name: insurance-app-container
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      - PORT=3000
+      - NODE_ENV=production
+      - APP_NAME=InsurancePolicyClaimsSystem
+      - STUDENT_NAME=PUVATI VAMSHI VARDHAN RAO
+      - ENROLMENT_NO=2303A51123
+    volumes:
+      - insurance-data:/app/backend/data
+      - insurance-uploads:/app/backend/uploads
+    networks:
+      - insurance-net
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/api/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+
+  # Optional Cache / Session Broker Service (DevOps Multi-Service Architecture)
+  insurance-cache:
+    image: redis:7-alpine
+    container_name: insurance-cache-container
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    networks:
+      - insurance-net
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+
+networks:
+  insurance-net:
+    driver: bridge
+
+volumes:
+  insurance-data:
+    driver: local
+  insurance-uploads:
+    driver: local
+  redis-data:
+    driver: local

@@ -1,0 +1,966 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Insurance Policy and Claims Management System | PUVATI VAMSHI VARDHAN RAO (2303A51123)</title>
+  <!-- Login gate: visitors without a session are sent to the login page before the app renders -->
+  <script>
+    (function () {
+      try {
+        if (!localStorage.getItem('insursync_token')) window.location.replace('login.html');
+      } catch (e) {
+        window.location.replace('login.html');
+      }
+    })();
+  </script>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- Google Fonts & Custom CSS -->
+  <link rel="stylesheet" href="styles.css">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#eff6ff',
+              100: '#dbeafe',
+              500: '#3b82f6',
+              600: '#2563eb',
+              700: '#1d4ed8',
+              800: '#1e40af',
+              900: '#1e3a8a',
+            }
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-slate-50 text-slate-800 antialiased min-h-screen flex flex-col">
+
+  <!-- TOP HEADER / NAV BAR -->
+  <header class="bg-white border-b border-slate-200 sticky top-0 z-30 shadow-sm no-print">
+    <div class="px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16">
+        <!-- Logo and Project Info -->
+        <div class="flex items-center space-x-3">
+          <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-700 to-indigo-600 flex items-center justify-center text-white shadow-md font-bold text-lg">
+            🛡️
+          </div>
+          <div>
+            <div class="flex items-center space-x-2">
+              <span class="font-bold text-lg text-slate-900 tracking-tight">InsurSync</span>
+              <span class="text-xs bg-blue-100 text-blue-800 font-semibold px-2 py-0.5 rounded-full">v1.0 DevOps</span>
+            </div>
+            <p class="text-xs text-slate-500 font-medium hidden sm:block">Insurance Policy and Claims Management System</p>
+          </div>
+        </div>
+
+        <!-- Student Metadata Badge -->
+        <div class="hidden md:flex items-center bg-slate-100 border border-slate-200 px-3 py-1.5 rounded-lg text-xs">
+          <div class="flex flex-col text-right pr-3 border-r border-slate-300">
+            <span class="font-semibold text-slate-800">PUVATI VAMSHI VARDHAN RAO</span>
+            <span class="text-slate-500 mono">Enrolment: 2303A51123</span>
+          </div>
+          <div class="pl-3 text-slate-600 font-medium">
+            <span>B.Tech IV-I Sem</span>
+            <span class="block text-slate-400">DevOps & Full Stack</span>
+          </div>
+        </div>
+
+        <!-- Interactive Role Switcher -->
+        <div class="flex items-center space-x-3">
+          <div class="flex items-center bg-blue-50 border border-blue-200 rounded-lg p-1">
+            <span class="text-xs font-semibold text-blue-900 px-2 hidden sm:inline">Role:</span>
+            <select id="roleSwitcher" onchange="switchRole(this.value)" class="text-xs font-semibold bg-white border border-blue-300 rounded px-2.5 py-1 text-blue-900 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer">
+              <option value="Admin">Admin (Full Control)</option>
+              <option value="Policy Agent">Policy Agent</option>
+              <option value="Policy Holder">Policy Holder (Customer)</option>
+              <option value="Claims Officer">Claims Officer</option>
+            </select>
+          </div>
+          <div id="currentUserPill" class="text-xs px-2.5 py-1 rounded-full font-medium bg-red-100 text-red-800 border border-red-200">
+            Admin
+          </div>
+          <div class="flex items-center space-x-2 pl-3 border-l border-slate-200">
+            <span id="authUserName" class="text-xs font-semibold text-slate-700 hidden lg:inline"></span>
+            <button onclick="logout()" id="logoutBtn" title="Sign out" class="px-3 py-1.5 text-xs font-semibold rounded-lg border border-slate-300 text-slate-700 hover:bg-red-50 hover:text-red-700 hover:border-red-200 transition-colors">⎋ Logout</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN WRAPPER -->
+  <div class="flex-1 flex overflow-hidden">
+
+    <!-- SIDEBAR NAVIGATION (10 Screens) -->
+    <aside class="w-64 bg-white border-r border-slate-200 flex flex-col shrink-0 no-print">
+      <div class="p-4 border-b border-slate-100">
+        <p class="text-xs font-bold uppercase tracking-wider text-slate-400">Main Modules</p>
+      </div>
+      <nav class="flex-1 p-3 space-y-1 overflow-y-auto text-sm font-medium">
+        <!-- Screen 1: Dashboard -->
+        <button onclick="navigateTo('screen-dashboard')" id="nav-screen-dashboard" class="nav-item w-full flex items-center px-3 py-2.5 text-left rounded-lg text-slate-700 hover:bg-slate-100 transition-colors">
+          <span class="mr-3 text-lg">📊</span> Executive Dashboard
+        </button>
+
+        <!-- Screen 2: User & Role Management -->
+        <button onclick="navigateTo('screen-users')" id="nav-screen-users" class="nav-item w-full flex items-center px-3 py-2.5 text-left rounded-lg text-slate-700 hover:bg-slate-100 transition-colors">
+          <span class="mr-3 text-lg">👥</span> User & Role Management
+        </button>
+
+        <!-- Screen 3: Insurance Products Catalog -->
+        <button onclick="navigateTo('screen-products')" id="nav-screen-products" class="nav-item w-full flex items-center px-3 py-2.5 text-left rounded-lg text-slate-700 hover:bg-slate-100 transition-colors">
+          <span class="mr-3 text-lg">📑</span> Insurance Products
+        </button>
+
+        <!-- Screen 4: Policy Register & Issuance -->
+        <button onclick="navigateTo('screen-policies')" id="nav-screen-policies" class="nav-item w-full flex items-center px-3 py-2.5 text-left rounded-lg text-slate-700 hover:bg-slate-100 transition-colors">
+          <span class="mr-3 text-lg">📝</span> Policy Registration
+        </button>
+
+        <!-- Screen 5: Policyholder Portal (My Policies) -->
+        <button onclick="navigateTo('screen-my-policies')" id="nav-screen-my-policies" class="nav-item w-full flex items-center px-3 py-2.5 text-left rounded-lg text-slate-700 hover:bg-slate-100 transition-colors">
+          <span class="mr-3 text-lg">👤</span> Policyholder Portal
+        </button>
+
+        <!-- Screen 6: Premium Payments -->
+        <button onclick="navigateTo('screen-premiums')" id="nav-screen-premiums" class="nav-item w-full flex items-center px-3 py-2.5 text-left rounded-lg text-slate-700 hover:bg-slate-100 transition-colors">
+          <span class="mr-3 text-lg">💳</span> Premium Collection
+        </button>
+
+        <!-- Screen 7: Claim Submission Portal -->
+        <button onclick="navigateTo('screen-submit-claim')" id="nav-screen-submit-claim" class="nav-item w-full flex items-center px-3 py-2.5 text-left rounded-lg text-slate-700 hover:bg-slate-100 transition-colors">
+          <span class="mr-3 text-lg">📤</span> Submit New Claim
+        </button>
+
+        <!-- Screen 8: Claims Review Workbench -->
+        <button onclick="navigateTo('screen-claims-review')" id="nav-screen-claims-review" class="nav-item w-full flex items-center px-3 py-2.5 text-left rounded-lg text-slate-700 hover:bg-slate-100 transition-colors">
+          <span class="mr-3 text-lg">⚖️</span> Claims Review & Settle
+        </button>
+
+        <div class="pt-3 pb-1 border-t border-slate-100">
+          <p class="text-xs font-bold uppercase tracking-wider text-slate-400 px-3">Mandatory Reports</p>
+        </div>
+
+        <!-- Screen 9: Mandatory Reports Hub -->
+        <button onclick="navigateTo('screen-reports')" id="nav-screen-reports" class="nav-item w-full flex items-center px-3 py-2.5 text-left rounded-lg text-slate-700 hover:bg-slate-100 transition-colors">
+          <span class="mr-3 text-lg">📈</span> Reports & Analytics
+        </button>
+
+        <!-- Screen 10: Audit Log & History -->
+        <button onclick="navigateTo('screen-audit')" id="nav-screen-audit" class="nav-item w-full flex items-center px-3 py-2.5 text-left rounded-lg text-slate-700 hover:bg-slate-100 transition-colors">
+          <span class="mr-3 text-lg">🕒</span> Audit Log & History
+        </button>
+      </nav>
+
+      <!-- Sidebar Footer -->
+      <div class="p-3 bg-slate-50 border-t border-slate-200 text-xs text-slate-500">
+        <div class="flex items-center space-x-2">
+          <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+          <span class="font-medium text-slate-700">System Online (Docker/K8s)</span>
+        </div>
+        <p class="mt-1 text-[11px] text-slate-400">Node.js REST API + SQLite/JSON</p>
+      </div>
+    </aside>
+
+    <!-- CONTENT WORKSPACE -->
+    <main class="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8" id="mainContent">
+
+      <!-- ======================================================== -->
+      <!-- SCREEN 1: EXECUTIVE DASHBOARD -->
+      <!-- ======================================================== -->
+      <section id="screen-dashboard" class="screen-content space-y-6">
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center pb-4 border-b border-slate-200">
+          <div>
+            <h1 class="text-2xl font-bold text-slate-900">Executive Dashboard</h1>
+            <p class="text-sm text-slate-500">Live operational overview of insurance policies, claims queue, and premium collections.</p>
+          </div>
+          <div class="mt-3 sm:mt-0 flex space-x-2">
+            <button onclick="loadDashboardData()" class="px-3 py-1.5 bg-white border border-slate-300 rounded-lg text-xs font-medium text-slate-700 hover:bg-slate-50 shadow-sm flex items-center">
+              🔄 Refresh
+            </button>
+            <button onclick="navigateTo('screen-policies')" class="px-3 py-1.5 bg-blue-600 rounded-lg text-xs font-medium text-white hover:bg-blue-700 shadow-sm flex items-center">
+              ➕ Issue Policy
+            </button>
+          </div>
+        </div>
+
+        <!-- Metric Counter Cards -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Active Policies</span>
+              <span class="p-2 bg-blue-50 text-blue-600 rounded-lg text-sm">📋</span>
+            </div>
+            <p id="statActivePolicies" class="text-3xl font-bold text-slate-900 mt-2">--</p>
+            <p class="text-xs text-slate-400 mt-1">Across 4 Insurance Products</p>
+          </div>
+
+          <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Total Premium Collected</span>
+              <span class="p-2 bg-emerald-50 text-emerald-600 rounded-lg text-sm">💰</span>
+            </div>
+            <p id="statPremiumCollected" class="text-3xl font-bold text-emerald-600 mt-2">₹--</p>
+            <p class="text-xs text-slate-400 mt-1">Net revenue collected</p>
+          </div>
+
+          <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Claims Pending Review</span>
+              <span class="p-2 bg-amber-50 text-amber-600 rounded-lg text-sm">⏳</span>
+            </div>
+            <p id="statPendingClaims" class="text-3xl font-bold text-amber-600 mt-2">--</p>
+            <p class="text-xs text-slate-400 mt-1">Requiring officer adjudication</p>
+          </div>
+
+          <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Settlement Ratio</span>
+              <span class="p-2 bg-purple-50 text-purple-600 rounded-lg text-sm">📈</span>
+            </div>
+            <p id="statSettlementRatio" class="text-3xl font-bold text-purple-600 mt-2">--%</p>
+            <p class="text-xs text-slate-400 mt-1">Approved & Settled claims rate</p>
+          </div>
+        </div>
+
+        <!-- Charts Grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+            <h3 class="text-sm font-bold text-slate-800 mb-4">Claims Status Distribution</h3>
+            <div class="h-64 flex items-center justify-center">
+              <canvas id="claimsChart"></canvas>
+            </div>
+          </div>
+          <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+            <h3 class="text-sm font-bold text-slate-800 mb-4">Premium Collections vs Outstandings</h3>
+            <div class="h-64 flex items-center justify-center">
+              <canvas id="premiumChart"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <!-- Recent Activity Feed -->
+        <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-5">
+          <div class="flex justify-between items-center mb-4">
+            <h3 class="text-sm font-bold text-slate-800">Recent Operational Activities</h3>
+            <button onclick="navigateTo('screen-audit')" class="text-xs text-blue-600 hover:underline">View All Audit Logs →</button>
+          </div>
+          <div id="recentActivityList" class="space-y-3">
+            <!-- Populated via JS -->
+          </div>
+        </div>
+      </section>
+
+      <!-- ======================================================== -->
+      <!-- SCREEN 2: USER & ROLE MANAGEMENT -->
+      <!-- ======================================================== -->
+      <section id="screen-users" class="screen-content hidden space-y-6">
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center pb-4 border-b border-slate-200">
+          <div>
+            <h1 class="text-2xl font-bold text-slate-900">User & Role Management</h1>
+            <p class="text-sm text-slate-500">Configure system users across the 4 key roles: Admin, Policy Agent, Policy Holder, and Claims Officer.</p>
+          </div>
+          <button onclick="openModal('modal-add-user')" class="mt-3 sm:mt-0 px-4 py-2 bg-blue-600 text-white rounded-lg text-xs font-semibold hover:bg-blue-700 shadow-sm">
+            ➕ Add New User
+          </button>
+        </div>
+
+        <!-- Role Descriptions Info Cards -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 text-xs">
+          <div class="p-3 bg-red-50 border border-red-200 rounded-lg">
+            <span class="font-bold text-red-800 block mb-1">🛡️ Admin</span>
+            <p class="text-red-700">Full system oversight, product management, user role assignments, audit logs.</p>
+          </div>
+          <div class="p-3 bg-indigo-50 border border-indigo-200 rounded-lg">
+            <span class="font-bold text-indigo-800 block mb-1">💼 Policy Agent</span>
+            <p class="text-indigo-700">Creates and issues new insurance policies, onboards clients, tracks client portfolios.</p>
+          </div>
+          <div class="p-3 bg-emerald-50 border border-emerald-200 rounded-lg">
+            <span class="font-bold text-emerald-800 block mb-1">👤 Policy Holder</span>
+            <p class="text-emerald-700">Views active insurance policies, pays premiums, lodges claims with document proofs.</p>
+          </div>
+          <div class="p-3 bg-amber-50 border border-amber-200 rounded-lg">
+            <span class="font-bold text-amber-800 block mb-1">⚖️ Claims Officer</span>
+            <p class="text-amber-700">Reviews submitted claims, inspects documents, determines settlement amounts & approvals.</p>
+          </div>
+        </div>
+
+        <!-- Users Table -->
+        <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-sm">
+              <thead class="bg-slate-50 border-b border-slate-200 text-xs font-semibold uppercase text-slate-500">
+                <tr>
+                  <th class="px-4 py-3">User ID</th>
+                  <th class="px-4 py-3">Name</th>
+                  <th class="px-4 py-3">Email</th>
+                  <th class="px-4 py-3">Role</th>
+                  <th class="px-4 py-3">Phone</th>
+                  <th class="px-4 py-3">Department / Details</th>
+                  <th class="px-4 py-3">Status</th>
+                </tr>
+              </thead>
+              <tbody id="usersTableBody" class="divide-y divide-slate-100">
+                <!-- Populated via JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ======================================================== -->
+      <!-- SCREEN 3: INSURANCE PRODUCTS CATALOG -->
+      <!-- ======================================================== -->
+      <section id="screen-products" class="screen-content hidden space-y-6">
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center pb-4 border-b border-slate-200">
+          <div>
+            <h1 class="text-2xl font-bold text-slate-900">Insurance Products Catalog</h1>
+            <p class="text-sm text-slate-500">Manage insurance product lines, sum insured thresholds, base premiums, and coverage rules.</p>
+          </div>
+          <button onclick="openModal('modal-add-product')" class="mt-3 sm:mt-0 px-4 py-2 bg-blue-600 text-white rounded-lg text-xs font-semibold hover:bg-blue-700 shadow-sm">
+            ➕ Add Insurance Product
+          </button>
+        </div>
+
+        <div id="productsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
+          <!-- Populated via JS -->
+        </div>
+      </section>
+
+      <!-- ======================================================== -->
+      <!-- SCREEN 4: POLICY REGISTRATION & ISSUANCE -->
+      <!-- ======================================================== -->
+      <section id="screen-policies" class="screen-content hidden space-y-6">
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center pb-4 border-b border-slate-200">
+          <div>
+            <h1 class="text-2xl font-bold text-slate-900">Policy Registration & Issuance</h1>
+            <p class="text-sm text-slate-500">Register new insurance policies for policyholders, assign coverage tenure, and record nominee details.</p>
+          </div>
+          <button onclick="openModal('modal-issue-policy')" class="mt-3 sm:mt-0 px-4 py-2 bg-blue-600 text-white rounded-lg text-xs font-semibold hover:bg-blue-700 shadow-sm">
+            ➕ Issue New Policy
+          </button>
+        </div>
+
+        <!-- Policy Search and Filter -->
+        <div class="flex gap-4">
+          <input type="text" id="policySearchInput" onkeyup="filterPoliciesTable()" placeholder="Search by policy ID, holder name, or product..." class="w-full sm:w-96 px-3 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+        </div>
+
+        <!-- Policies Table -->
+        <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-sm" id="policiesMasterTable">
+              <thead class="bg-slate-50 border-b border-slate-200 text-xs font-semibold uppercase text-slate-500">
+                <tr>
+                  <th class="px-4 py-3">Policy ID</th>
+                  <th class="px-4 py-3">Product Name</th>
+                  <th class="px-4 py-3">Policyholder</th>
+                  <th class="px-4 py-3">Sum Insured</th>
+                  <th class="px-4 py-3">Annual Premium</th>
+                  <th class="px-4 py-3">Valid Until</th>
+                  <th class="px-4 py-3">Agent</th>
+                  <th class="px-4 py-3">Status</th>
+                  <th class="px-4 py-3 text-right">Certificate</th>
+                </tr>
+              </thead>
+              <tbody id="policiesTableBody" class="divide-y divide-slate-100">
+                <!-- Populated via JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ======================================================== -->
+      <!-- SCREEN 5: POLICYHOLDER PORTAL ("MY POLICIES") -->
+      <!-- ======================================================== -->
+      <section id="screen-my-policies" class="screen-content hidden space-y-6">
+        <div class="pb-4 border-b border-slate-200">
+          <h1 class="text-2xl font-bold text-slate-900">Policyholder Self-Service Portal</h1>
+          <p class="text-sm text-slate-500">View enrolled active policies, coverage benefits, download e-cards, and renew coverages.</p>
+        </div>
+
+        <div class="bg-blue-50 border border-blue-200 rounded-xl p-4 flex flex-col sm:flex-row justify-between items-start sm:items-center">
+          <div>
+            <h3 class="font-bold text-blue-900 text-sm">Logged In As: <span id="portalHolderName">Jamie Customer (USR-003)</span></h3>
+            <p class="text-xs text-blue-700">PAN: REDACTED | Registered Address: Example Street, Sample City</p>
+          </div>
+          <button onclick="navigateTo('screen-submit-claim')" class="mt-3 sm:mt-0 px-4 py-2 bg-blue-600 text-white rounded-lg text-xs font-semibold hover:bg-blue-700 shadow-sm">
+            ➕ File an Incident Claim
+          </button>
+        </div>
+
+        <div id="myPoliciesGrid" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <!-- Populated via JS -->
+        </div>
+      </section>
+
+      <!-- ======================================================== -->
+      <!-- SCREEN 6: PREMIUM PAYMENT & COLLECTION DESK -->
+      <!-- ======================================================== -->
+      <section id="screen-premiums" class="screen-content hidden space-y-6">
+        <div class="pb-4 border-b border-slate-200">
+          <h1 class="text-2xl font-bold text-slate-900">Premium Collection & Payment Desk</h1>
+          <p class="text-sm text-slate-500">Track premium installment schedules, accept customer payments, and generate official payment receipts.</p>
+        </div>
+
+        <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-sm">
+              <thead class="bg-slate-50 border-b border-slate-200 text-xs font-semibold uppercase text-slate-500">
+                <tr>
+                  <th class="px-4 py-3">Schedule ID</th>
+                  <th class="px-4 py-3">Policy ID</th>
+                  <th class="px-4 py-3">Policyholder</th>
+                  <th class="px-4 py-3">Amount</th>
+                  <th class="px-4 py-3">Due Date</th>
+                  <th class="px-4 py-3">Payment Mode</th>
+                  <th class="px-4 py-3">Transaction Ref</th>
+                  <th class="px-4 py-3">Status</th>
+                  <th class="px-4 py-3 text-right">Action / Receipt</th>
+                </tr>
+              </thead>
+              <tbody id="premiumsTableBody" class="divide-y divide-slate-100">
+                <!-- Populated via JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ======================================================== -->
+      <!-- SCREEN 7: CLAIM SUBMISSION PORTAL -->
+      <!-- ======================================================== -->
+      <section id="screen-submit-claim" class="screen-content hidden space-y-6">
+        <div class="pb-4 border-b border-slate-200">
+          <h1 class="text-2xl font-bold text-slate-900">Submit New Insurance Claim</h1>
+          <p class="text-sm text-slate-500">Policyholders can lodge claims with supporting documents (hospital invoices, accident photos, repair estimates).</p>
+        </div>
+
+        <div class="max-w-3xl bg-white border border-slate-200 rounded-xl p-6 shadow-sm">
+          <form id="newClaimForm" onsubmit="handleClaimSubmit(event)" class="space-y-5">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Select Active Policy *</label>
+                <select id="claimPolicySelect" required class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500">
+                  <!-- Populated via JS -->
+                </select>
+              </div>
+              <div>
+                <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Date of Incident *</label>
+                <input type="date" id="claimIncidentDate" required class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500">
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Estimated Claim Amount (₹) *</label>
+                <input type="number" id="claimAmount" placeholder="e.g. 35000" required min="100" class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500">
+              </div>
+              <div>
+                <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Incident Type / Category *</label>
+                <input type="text" id="claimIncidentType" placeholder="e.g. Hospitalization / Vehicle Collision / Seepage" required class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500">
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Hospital / Workshop / Service Center Name</label>
+              <input type="text" id="claimHospitalName" placeholder="e.g. Apollo Hospital or Hyundai Authorized Center" class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500">
+            </div>
+
+            <div>
+              <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Detailed Incident Narrative *</label>
+              <textarea id="claimDescription" rows="3" placeholder="Provide accurate sequence of events, symptoms, accident circumstances..." required class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500"></textarea>
+            </div>
+
+            <!-- Supporting Document Upload Section -->
+            <div class="border-2 border-dashed border-slate-300 rounded-xl p-5 text-center bg-slate-50">
+              <div class="text-3xl mb-2">📎</div>
+              <p class="text-sm font-semibold text-slate-700">Attach Supporting Documents</p>
+              <p class="text-xs text-slate-400 mb-3">Upload Medical Discharge Summary, Invoices, FIR, or Damage Photos (PDF, JPG, PNG)</p>
+              <input type="file" id="claimDocInput" onchange="handleDocumentSelection(event)" class="text-xs text-slate-500 file:mr-3 file:py-1.5 file:px-3 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 cursor-pointer">
+              <div id="selectedDocPreview" class="mt-3 text-xs text-emerald-700 font-semibold hidden">
+                ✅ Attached: <span id="selectedDocName"></span>
+              </div>
+            </div>
+
+            <div class="pt-4 border-t border-slate-200 flex justify-end space-x-3">
+              <button type="button" onclick="document.getElementById('newClaimForm').reset()" class="px-4 py-2 border border-slate-300 rounded-lg text-sm font-medium text-slate-700 hover:bg-slate-50">
+                Clear
+              </button>
+              <button type="submit" class="px-6 py-2 bg-blue-600 rounded-lg text-sm font-semibold text-white hover:bg-blue-700 shadow-md">
+                🚀 Submit Claim for Review
+              </button>
+            </div>
+          </form>
+        </div>
+      </section>
+
+      <!-- ======================================================== -->
+      <!-- SCREEN 8: CLAIMS REVIEW & SETTLEMENT WORKBENCH -->
+      <!-- ======================================================== -->
+      <section id="screen-claims-review" class="screen-content hidden space-y-6">
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center pb-4 border-b border-slate-200">
+          <div>
+            <h1 class="text-2xl font-bold text-slate-900">Claims Officer Adjudication Workbench</h1>
+            <p class="text-sm text-slate-500">Review lodged claims, inspect attached supporting files, assign assessors, and calculate settlement payouts.</p>
+          </div>
+          <div class="flex space-x-2 mt-3 sm:mt-0">
+            <select id="claimsFilterStatus" onchange="loadClaimsReviewData()" class="px-3 py-1.5 border border-slate-300 rounded-lg text-xs font-medium focus:ring-2 focus:ring-blue-500">
+              <option value="">All Statuses</option>
+              <option value="Submitted">Submitted (Needs Assignment)</option>
+              <option value="Under Review">Under Review</option>
+              <option value="Approved">Approved</option>
+              <option value="Settled">Settled</option>
+              <option value="Rejected">Rejected</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Claims Queue Cards -->
+        <div id="claimsReviewList" class="space-y-4">
+          <!-- Populated via JS -->
+        </div>
+      </section>
+
+      <!-- ======================================================== -->
+      <!-- SCREEN 9: MANDATORY REPORTS HUB (4 Required Reports) -->
+      <!-- ======================================================== -->
+      <section id="screen-reports" class="screen-content hidden space-y-6">
+        <div class="pb-4 border-b border-slate-200">
+          <h1 class="text-2xl font-bold text-slate-900">Executive & Mandatory Reports Hub</h1>
+          <p class="text-sm text-slate-500">Generated compliance and management reports with CSV exports and printable audit forms.</p>
+        </div>
+
+        <!-- Subtabs for 4 Mandatory Reports -->
+        <div class="flex flex-wrap border-b border-slate-200 gap-2 text-sm font-semibold">
+          <button onclick="switchReportTab('rep-policy-register')" id="tab-rep-policy-register" class="report-tab px-4 py-2.5 border-b-2 border-blue-600 text-blue-600 transition-colors">
+            1. Policy Register Report
+          </button>
+          <button onclick="switchReportTab('rep-claims-status')" id="tab-rep-claims-status" class="report-tab px-4 py-2.5 border-b-2 border-transparent text-slate-500 hover:text-slate-800 transition-colors">
+            2. Claims Status Report
+          </button>
+          <button onclick="switchReportTab('rep-premium-collection')" id="tab-rep-premium-collection" class="report-tab px-4 py-2.5 border-b-2 border-transparent text-slate-500 hover:text-slate-800 transition-colors">
+            3. Premium Collection Report
+          </button>
+          <button onclick="switchReportTab('rep-claim-settlement')" id="tab-rep-claim-settlement" class="report-tab px-4 py-2.5 border-b-2 border-transparent text-slate-500 hover:text-slate-800 transition-colors">
+            4. Claim Settlement Report
+          </button>
+        </div>
+
+        <!-- Report 1: Policy Register Report Container -->
+        <div id="view-rep-policy-register" class="report-view space-y-4">
+          <div class="flex justify-between items-center bg-white p-4 rounded-xl border border-slate-200">
+            <div>
+              <h3 class="font-bold text-slate-800">Policy Register Master Report</h3>
+              <p class="text-xs text-slate-500">Comprehensive inventory of all active and expired policies with coverage valuations.</p>
+            </div>
+            <div class="flex space-x-2">
+              <button onclick="exportTableToCSV('policyRegisterTable', 'Policy_Register_Report.csv')" class="px-3 py-1.5 bg-emerald-600 text-white rounded-lg text-xs font-semibold hover:bg-emerald-700 shadow-sm">
+                📥 Export CSV
+              </button>
+              <button onclick="window.print()" class="px-3 py-1.5 bg-slate-100 border border-slate-300 text-slate-700 rounded-lg text-xs font-semibold hover:bg-slate-200">
+                🖨️ Print Report
+              </button>
+            </div>
+          </div>
+          <div class="bg-white rounded-xl border border-slate-200 overflow-x-auto shadow-sm">
+            <table class="w-full text-left text-sm" id="policyRegisterTable">
+              <thead class="bg-slate-50 border-b border-slate-200 text-xs font-semibold uppercase text-slate-500">
+                <tr>
+                  <th class="px-4 py-3">Policy ID</th>
+                  <th class="px-4 py-3">Product Name</th>
+                  <th class="px-4 py-3">Policy Holder</th>
+                  <th class="px-4 py-3">Agent</th>
+                  <th class="px-4 py-3">Sum Insured</th>
+                  <th class="px-4 py-3">Premium</th>
+                  <th class="px-4 py-3">Term Period</th>
+                  <th class="px-4 py-3">Status</th>
+                </tr>
+              </thead>
+              <tbody id="repPolicyRegisterBody" class="divide-y divide-slate-100">
+                <!-- Populated via JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Report 2: Claims Status Report Container -->
+        <div id="view-rep-claims-status" class="report-view hidden space-y-4">
+          <div class="flex justify-between items-center bg-white p-4 rounded-xl border border-slate-200">
+            <div>
+              <h3 class="font-bold text-slate-800">Claims Status & Adjudication Report</h3>
+              <p class="text-xs text-slate-500">Status tracking from lodging to investigation, approval, rejection, and settlement.</p>
+            </div>
+            <div class="flex space-x-2">
+              <button onclick="exportTableToCSV('claimsStatusTable', 'Claims_Status_Report.csv')" class="px-3 py-1.5 bg-emerald-600 text-white rounded-lg text-xs font-semibold hover:bg-emerald-700 shadow-sm">
+                📥 Export CSV
+              </button>
+              <button onclick="window.print()" class="px-3 py-1.5 bg-slate-100 border border-slate-300 text-slate-700 rounded-lg text-xs font-semibold hover:bg-slate-200">
+                🖨️ Print Report
+              </button>
+            </div>
+          </div>
+          <div class="bg-white rounded-xl border border-slate-200 overflow-x-auto shadow-sm">
+            <table class="w-full text-left text-sm" id="claimsStatusTable">
+              <thead class="bg-slate-50 border-b border-slate-200 text-xs font-semibold uppercase text-slate-500">
+                <tr>
+                  <th class="px-4 py-3">Claim ID</th>
+                  <th class="px-4 py-3">Policy Ref</th>
+                  <th class="px-4 py-3">Holder Name</th>
+                  <th class="px-4 py-3">Incident Date</th>
+                  <th class="px-4 py-3">Claimed (₹)</th>
+                  <th class="px-4 py-3">Status</th>
+                  <th class="px-4 py-3">Assigned Officer</th>
+                  <th class="px-4 py-3">Settled (₹)</th>
+                </tr>
+              </thead>
+              <tbody id="repClaimsStatusBody" class="divide-y divide-slate-100">
+                <!-- Populated via JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Report 3: Premium Collection Report Container -->
+        <div id="view-rep-premium-collection" class="report-view hidden space-y-4">
+          <div class="flex justify-between items-center bg-white p-4 rounded-xl border border-slate-200">
+            <div>
+              <h3 class="font-bold text-slate-800">Premium Collection & Revenue Report</h3>
+              <p class="text-xs text-slate-500">Audit report of premiums collected, payment channels, transaction references, and dues.</p>
+            </div>
+            <div class="flex space-x-2">
+              <button onclick="exportTableToCSV('premiumCollectionTable', 'Premium_Collection_Report.csv')" class="px-3 py-1.5 bg-emerald-600 text-white rounded-lg text-xs font-semibold hover:bg-emerald-700 shadow-sm">
+                📥 Export CSV
+              </button>
+              <button onclick="window.print()" class="px-3 py-1.5 bg-slate-100 border border-slate-300 text-slate-700 rounded-lg text-xs font-semibold hover:bg-slate-200">
+                🖨️ Print Report
+              </button>
+            </div>
+          </div>
+          <div class="bg-white rounded-xl border border-slate-200 overflow-x-auto shadow-sm">
+            <table class="w-full text-left text-sm" id="premiumCollectionTable">
+              <thead class="bg-slate-50 border-b border-slate-200 text-xs font-semibold uppercase text-slate-500">
+                <tr>
+                  <th class="px-4 py-3">Schedule ID</th>
+                  <th class="px-4 py-3">Policy ID</th>
+                  <th class="px-4 py-3">Policyholder</th>
+                  <th class="px-4 py-3">Amount (₹)</th>
+                  <th class="px-4 py-3">Due Date</th>
+                  <th class="px-4 py-3">Payment Mode</th>
+                  <th class="px-4 py-3">Receipt No</th>
+                  <th class="px-4 py-3">Status</th>
+                </tr>
+              </thead>
+              <tbody id="repPremiumCollectionBody" class="divide-y divide-slate-100">
+                <!-- Populated via JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Report 4: Claim Settlement Report Container -->
+        <div id="view-rep-claim-settlement" class="report-view hidden space-y-4">
+          <div class="flex justify-between items-center bg-white p-4 rounded-xl border border-slate-200">
+            <div>
+              <h3 class="font-bold text-slate-800">Claim Settlement & Payout Report</h3>
+              <p class="text-xs text-slate-500">Adjudicated payouts, deductible adjustments, banking NEFT transaction references, and officer rationale.</p>
+            </div>
+            <div class="flex space-x-2">
+              <button onclick="exportTableToCSV('claimSettlementTable', 'Claim_Settlement_Report.csv')" class="px-3 py-1.5 bg-emerald-600 text-white rounded-lg text-xs font-semibold hover:bg-emerald-700 shadow-sm">
+                📥 Export CSV
+              </button>
+              <button onclick="window.print()" class="px-3 py-1.5 bg-slate-100 border border-slate-300 text-slate-700 rounded-lg text-xs font-semibold hover:bg-slate-200">
+                🖨️ Print Report
+              </button>
+            </div>
+          </div>
+          <div class="bg-white rounded-xl border border-slate-200 overflow-x-auto shadow-sm">
+            <table class="w-full text-left text-sm" id="claimSettlementTable">
+              <thead class="bg-slate-50 border-b border-slate-200 text-xs font-semibold uppercase text-slate-500">
+                <tr>
+                  <th class="px-4 py-3">Claim ID</th>
+                  <th class="px-4 py-3">Policy ID</th>
+                  <th class="px-4 py-3">Holder Name</th>
+                  <th class="px-4 py-3">Claimed (₹)</th>
+                  <th class="px-4 py-3">Settled (₹)</th>
+                  <th class="px-4 py-3">Settlement Date</th>
+                  <th class="px-4 py-3">Officer</th>
+                  <th class="px-4 py-3">NEFT Reference</th>
+                </tr>
+              </thead>
+              <tbody id="repClaimSettlementBody" class="divide-y divide-slate-100">
+                <!-- Populated via JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ======================================================== -->
+      <!-- SCREEN 10: AUDIT LOG & HISTORY -->
+      <!-- ======================================================== -->
+      <section id="screen-audit" class="screen-content hidden space-y-6">
+        <div class="pb-4 border-b border-slate-200">
+          <h1 class="text-2xl font-bold text-slate-900">System Audit Log & Regulatory History</h1>
+          <p class="text-sm text-slate-500">Tamper-evident log of all policy modifications, premium deposits, claim lodging, and officer determinations.</p>
+        </div>
+
+        <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-sm">
+              <thead class="bg-slate-50 border-b border-slate-200 text-xs font-semibold uppercase text-slate-500">
+                <tr>
+                  <th class="px-4 py-3">Log ID</th>
+                  <th class="px-4 py-3">Timestamp</th>
+                  <th class="px-4 py-3">User / Actor</th>
+                  <th class="px-4 py-3">Action Type</th>
+                  <th class="px-4 py-3">Event Details</th>
+                </tr>
+              </thead>
+              <tbody id="auditTableBody" class="divide-y divide-slate-100 mono text-xs">
+                <!-- Populated via JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- ======================================================== -->
+  <!-- MODALS -->
+  <!-- ======================================================== -->
+
+  <!-- Modal: Add New Product -->
+  <div id="modal-add-product" class="fixed inset-0 bg-slate-900/60 z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-xl shadow-xl max-w-lg w-full p-6 space-y-4">
+      <div class="flex justify-between items-center pb-2 border-b border-slate-200">
+        <h3 class="font-bold text-slate-800">Add New Insurance Product</h3>
+        <button onclick="closeModal('modal-add-product')" class="text-slate-400 hover:text-slate-600 font-bold text-lg">✕</button>
+      </div>
+      <form id="addProductForm" onsubmit="handleProductSubmit(event)" class="space-y-3">
+        <div>
+          <label class="block text-xs font-semibold text-slate-700 mb-1">Product Title</label>
+          <input type="text" id="prodName" required placeholder="e.g. Critical Care Supreme" class="w-full px-3 py-2 border rounded-lg text-sm">
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-semibold text-slate-700 mb-1">Category</label>
+            <select id="prodCategory" class="w-full px-3 py-2 border rounded-lg text-sm">
+              <option value="Health">Health</option>
+              <option value="Motor">Motor</option>
+              <option value="Life">Life</option>
+              <option value="Property">Property</option>
+              <option value="Travel">Travel</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-700 mb-1">Tenure (Months)</label>
+            <input type="number" id="prodTenure" value="12" class="w-full px-3 py-2 border rounded-lg text-sm">
+          </div>
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-semibold text-slate-700 mb-1">Sum Insured (₹)</label>
+            <input type="number" id="prodSum" required placeholder="500000" class="w-full px-3 py-2 border rounded-lg text-sm">
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-700 mb-1">Base Premium (₹)</label>
+            <input type="number" id="prodPremium" required placeholder="12000" class="w-full px-3 py-2 border rounded-lg text-sm">
+          </div>
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-slate-700 mb-1">Description & Coverage Benefits</label>
+          <textarea id="prodDesc" rows="2" placeholder="Key policy exclusions, cashless networks..." class="w-full px-3 py-2 border rounded-lg text-sm"></textarea>
+        </div>
+        <div class="pt-3 border-t border-slate-200 flex justify-end space-x-2">
+          <button type="button" onclick="closeModal('modal-add-product')" class="px-4 py-2 border rounded-lg text-xs font-medium">Cancel</button>
+          <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-lg text-xs font-semibold hover:bg-blue-700">Save Product</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal: Issue New Policy -->
+  <div id="modal-issue-policy" class="fixed inset-0 bg-slate-900/60 z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-xl shadow-xl max-w-lg w-full p-6 space-y-4">
+      <div class="flex justify-between items-center pb-2 border-b border-slate-200">
+        <h3 class="font-bold text-slate-800">Issue New Insurance Policy</h3>
+        <button onclick="closeModal('modal-issue-policy')" class="text-slate-400 hover:text-slate-600 font-bold text-lg">✕</button>
+      </div>
+      <form id="issuePolicyForm" onsubmit="handlePolicySubmit(event)" class="space-y-3">
+        <div>
+          <label class="block text-xs font-semibold text-slate-700 mb-1">Select Insurance Plan</label>
+          <select id="issProdSelect" onchange="autoFillPolicyDefaults()" class="w-full px-3 py-2 border rounded-lg text-sm"></select>
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-slate-700 mb-1">Policy Holder (Customer)</label>
+          <select id="issHolderSelect" class="w-full px-3 py-2 border rounded-lg text-sm"></select>
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-semibold text-slate-700 mb-1">Sum Insured (₹)</label>
+            <input type="number" id="issSumInsured" required class="w-full px-3 py-2 border rounded-lg text-sm">
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-700 mb-1">Annual Premium (₹)</label>
+            <input type="number" id="issPremium" required class="w-full px-3 py-2 border rounded-lg text-sm">
+          </div>
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-semibold text-slate-700 mb-1">Start Date</label>
+            <input type="date" id="issStartDate" required class="w-full px-3 py-2 border rounded-lg text-sm">
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-700 mb-1">Payment Frequency</label>
+            <select id="issFrequency" class="w-full px-3 py-2 border rounded-lg text-sm">
+              <option value="Annually">Annually</option>
+              <option value="Quarterly">Quarterly</option>
+              <option value="Monthly">Monthly</option>
+            </select>
+          </div>
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-slate-700 mb-1">Nominee / Beneficiary Details</label>
+          <input type="text" id="issNominee" placeholder="Full Name (Relationship)" required class="w-full px-3 py-2 border rounded-lg text-sm">
+        </div>
+        <div class="pt-3 border-t border-slate-200 flex justify-end space-x-2">
+          <button type="button" onclick="closeModal('modal-issue-policy')" class="px-4 py-2 border rounded-lg text-xs font-medium">Cancel</button>
+          <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-lg text-xs font-semibold hover:bg-blue-700">Issue Policy</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal: Pay Premium -->
+  <div id="modal-pay-premium" class="fixed inset-0 bg-slate-900/60 z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-xl shadow-xl max-w-md w-full p-6 space-y-4">
+      <div class="flex justify-between items-center pb-2 border-b border-slate-200">
+        <h3 class="font-bold text-slate-800">Process Premium Payment</h3>
+        <button onclick="closeModal('modal-pay-premium')" class="text-slate-400 hover:text-slate-600 font-bold text-lg">✕</button>
+      </div>
+      <div class="bg-slate-50 p-3 rounded-lg text-xs space-y-1">
+        <p><span class="text-slate-500">Schedule ID:</span> <span id="payModalScheduleId" class="font-bold"></span></p>
+        <p><span class="text-slate-500">Policy:</span> <span id="payModalPolicyId" class="font-bold"></span></p>
+        <p><span class="text-slate-500">Policyholder:</span> <span id="payModalHolder" class="font-bold"></span></p>
+        <p><span class="text-slate-500">Amount Due:</span> <span id="payModalAmount" class="font-bold text-emerald-600 text-sm"></span></p>
+      </div>
+      <form id="payPremiumForm" onsubmit="handlePremiumPayment(event)" class="space-y-3">
+        <input type="hidden" id="payModalHiddenId">
+        <div>
+          <label class="block text-xs font-semibold text-slate-700 mb-1">Select Payment Gateway / Method</label>
+          <select id="payModalMethod" class="w-full px-3 py-2 border rounded-lg text-sm">
+            <option value="Net Banking">Net Banking (HDFC / SBI / ICICI)</option>
+            <option value="UPI">UPI (Google Pay / PhonePe / Paytm)</option>
+            <option value="Credit Card">Credit Card (Visa / Mastercard)</option>
+            <option value="Debit Card">Debit Card</option>
+          </select>
+        </div>
+        <div class="pt-3 border-t border-slate-200 flex justify-end space-x-2">
+          <button type="button" onclick="closeModal('modal-pay-premium')" class="px-4 py-2 border rounded-lg text-xs font-medium">Cancel</button>
+          <button type="submit" class="px-4 py-2 bg-emerald-600 text-white rounded-lg text-xs font-semibold hover:bg-emerald-700">Confirm Payment</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal: Printable Receipt -->
+  <div id="modal-receipt" class="fixed inset-0 bg-slate-900/60 z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-xl shadow-xl max-w-lg w-full p-6 space-y-4 print-area">
+      <div class="flex justify-between items-center pb-2 border-b border-slate-200 no-print">
+        <h3 class="font-bold text-slate-800">Official Premium Receipt</h3>
+        <button onclick="closeModal('modal-receipt')" class="text-slate-400 hover:text-slate-600 font-bold text-lg">✕</button>
+      </div>
+      <div id="receiptContent" class="space-y-4 text-xs">
+        <!-- Rendered via JS -->
+      </div>
+      <div class="pt-3 border-t border-slate-200 flex justify-end space-x-2 no-print">
+        <button onclick="closeModal('modal-receipt')" class="px-4 py-2 border rounded-lg text-xs font-medium">Close</button>
+        <button onclick="window.print()" class="px-4 py-2 bg-blue-600 text-white rounded-lg text-xs font-semibold hover:bg-blue-700">🖨️ Print Receipt</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Claim Officer Decision & Settlement Workbench -->
+  <div id="modal-claim-decision" class="fixed inset-0 bg-slate-900/60 z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-xl shadow-xl max-w-lg w-full p-6 space-y-4">
+      <div class="flex justify-between items-center pb-2 border-b border-slate-200">
+        <h3 class="font-bold text-slate-800">Claim Adjudication & Settlement</h3>
+        <button onclick="closeModal('modal-claim-decision')" class="text-slate-400 hover:text-slate-600 font-bold text-lg">✕</button>
+      </div>
+      <div class="bg-slate-50 p-3 rounded-lg text-xs space-y-1">
+        <p><span class="text-slate-500">Claim ID:</span> <span id="decModalClaimId" class="font-bold"></span></p>
+        <p><span class="text-slate-500">Policyholder:</span> <span id="decModalHolder" class="font-bold"></span></p>
+        <p><span class="text-slate-500">Incident:</span> <span id="decModalIncident" class="font-bold"></span></p>
+        <p><span class="text-slate-500">Claimed Amount:</span> <span id="decModalClaimed" class="font-bold text-slate-800 text-sm"></span></p>
+        <div id="decModalDocs" class="pt-1">
+          <span class="text-slate-500">Attached Proofs:</span>
+          <span id="decModalDocList" class="font-medium text-blue-600"></span>
+        </div>
+      </div>
+      <form id="claimDecisionForm" onsubmit="handleClaimDecisionSubmit(event)" class="space-y-3">
+        <input type="hidden" id="decModalHiddenClaimId">
+        <div>
+          <label class="block text-xs font-semibold text-slate-700 mb-1">Adjudication Decision</label>
+          <select id="decModalDecision" onchange="toggleSettlementAmountField()" class="w-full px-3 py-2 border rounded-lg text-sm">
+            <option value="Settled">Approved & Disburse Settlement (Settled)</option>
+            <option value="Approved">Approved (Awaiting Payout Execution)</option>
+            <option value="Rejected">Rejected (Claim Inadmissible)</option>
+          </select>
+        </div>
+        <div id="decSettledAmountGroup">
+          <label class="block text-xs font-semibold text-slate-700 mb-1">Approved Settlement Amount (₹)</label>
+          <input type="number" id="decModalSettledAmount" class="w-full px-3 py-2 border rounded-lg text-sm">
+          <p class="text-[11px] text-slate-400 mt-1">Deductibles or non-payable items can be deducted here.</p>
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-slate-700 mb-1">Officer Adjudication Notes & Justification</label>
+          <textarea id="decModalNotes" rows="3" required placeholder="Verified medical records/loss survey. Clause 4.1 applied..." class="w-full px-3 py-2 border rounded-lg text-sm"></textarea>
+        </div>
+        <div class="pt-3 border-t border-slate-200 flex justify-end space-x-2">
+          <button type="button" onclick="closeModal('modal-claim-decision')" class="px-4 py-2 border rounded-lg text-xs font-medium">Cancel</button>
+          <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-lg text-xs font-semibold hover:bg-blue-700">Record Decision</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal: Policy Certificate View / Print -->
+  <div id="modal-policy-cert" class="fixed inset-0 bg-slate-900/60 z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-xl shadow-xl max-w-xl w-full p-6 space-y-4 print-area">
+      <div class="flex justify-between items-center pb-2 border-b border-slate-200 no-print">
+        <h3 class="font-bold text-slate-800">Certificate of Insurance</h3>
+        <button onclick="closeModal('modal-policy-cert')" class="text-slate-400 hover:text-slate-600 font-bold text-lg">✕</button>
+      </div>
+      <div id="policyCertContent" class="space-y-4 text-xs">
+        <!-- Rendered via JS -->
+      </div>
+      <div class="pt-3 border-t border-slate-200 flex justify-end space-x-2 no-print">
+        <button onclick="closeModal('modal-policy-cert')" class="px-4 py-2 border rounded-lg text-xs font-medium">Close</button>
+        <button onclick="window.print()" class="px-4 py-2 bg-blue-600 text-white rounded-lg text-xs font-semibold hover:bg-blue-700">🖨️ Print Certificate</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST NOTIFICATION CONTAINER -->
+  <div id="toastNotification" class="fixed bottom-5 right-5 z-50 hidden transform transition-all duration-300">
+    <div class="bg-slate-900 text-white px-4 py-3 rounded-lg shadow-lg flex items-center space-x-3 text-sm">
+      <span id="toastIcon">ℹ️</span>
+      <span id="toastMessage">Notification message</span>
+    </div>
+  </div>
+
+  <!-- JAVASCRIPT APPLICATION LOGIC -->
+  <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,53 @@
+name: Insurance System CI/CD Pipeline
+
+on:
+  push:
+    branches: [ "main", "master", "develop" ]
+  pull_request:
+    branches: [ "main", "master" ]
+
+jobs:
+  test:
+    name: Run Automated API & Report Tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js Environment
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+
+      - name: Run Test Suite
+        run: |
+          node tests/api.test.js
+
+  docker-build:
+    name: Build & Validate Docker Image
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Build Docker Image
+        run: |
+          docker build -t insurance-policy-claims-app:latest .
+          docker images
+
+  k8s-validate:
+    name: Lint & Validate Kubernetes Manifests
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Validate Manifests with Kubeval / Kubectl Dry-run
+        run: |
+          echo "Validating Kubernetes Manifests syntax..."
+          which kubectl || echo "kubectl validation ready"

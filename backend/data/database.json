@@ -1,0 +1,536 @@
+{
+  "products": [
+    {
+      "id": "PROD-101",
+      "name": "Health Shield Platinum",
+      "category": "Health",
+      "description": "Comprehensive cashless hospitalization, critical illness, and day-care treatment coverage.",
+      "sumInsured": 500000,
+      "basePremium": 12000,
+      "tenureMonths": 12,
+      "deductible": 5000,
+      "status": "Active"
+    },
+    {
+      "id": "PROD-102",
+      "name": "AutoProtect Comprehensive",
+      "category": "Motor",
+      "description": "Bumper-to-bumper car insurance including zero depreciation, accidental damage, and third-party liability.",
+      "sumInsured": 850000,
+      "basePremium": 18500,
+      "tenureMonths": 12,
+      "deductible": 2000,
+      "status": "Active"
+    },
+    {
+      "id": "PROD-103",
+      "name": "Term Life Secure 360",
+      "category": "Life",
+      "description": "Pure term life protection providing financial security to family beneficiaries with accidental death rider.",
+      "sumInsured": 5000000,
+      "basePremium": 22000,
+      "tenureMonths": 120,
+      "deductible": 0,
+      "status": "Active"
+    },
+    {
+      "id": "PROD-104",
+      "name": "Home & Property Guardian",
+      "category": "Property",
+      "description": "Fire, earthquake, burglary, and natural disaster structural and contents insurance coverage.",
+      "sumInsured": 3000000,
+      "basePremium": 9500,
+      "tenureMonths": 36,
+      "deductible": 10000,
+      "status": "Active"
+    }
+  ],
+  "users": [
+    {
+      "id": "USR-001",
+      "name": "Demo Administrator",
+      "email": "admin@example.com",
+      "role": "Admin",
+      "phone": "0000000000",
+      "status": "Active",
+      "department": "System Administration"
+    },
+    {
+      "id": "USR-002",
+      "name": "Alex Agent",
+      "email": "agent@example.com",
+      "role": "Policy Agent",
+      "phone": "0000000000",
+      "status": "Active",
+      "licenseNo": "REDACTED",
+      "department": "Retail Sales & Agency"
+    },
+    {
+      "id": "USR-003",
+      "name": "Jamie Customer",
+      "email": "holder1@example.com",
+      "role": "Policy Holder",
+      "phone": "0000000000",
+      "status": "Active",
+      "address": "Example Street, Sample City",
+      "pan": "REDACTED"
+    },
+    {
+      "id": "USR-004",
+      "name": "Casey Officer",
+      "email": "officer@example.com",
+      "role": "Claims Officer",
+      "phone": "0000000000",
+      "status": "Active",
+      "approvalLimit": 1000000,
+      "department": "Claims Assessment & Settlements"
+    },
+    {
+      "id": "USR-005",
+      "name": "Riley Customer",
+      "email": "holder2@example.com",
+      "role": "Policy Holder",
+      "phone": "0000000000",
+      "status": "Active",
+      "address": "Example Street, Sample City",
+      "pan": "REDACTED"
+    }
+  ],
+  "policies": [
+    {
+      "id": "POL-2026-001",
+      "productId": "PROD-101",
+      "productName": "Health Shield Platinum",
+      "policyHolderId": "USR-003",
+      "policyHolderName": "Jamie Customer",
+      "agentId": "USR-002",
+      "agentName": "Alex Agent",
+      "sumInsured": 500000,
+      "annualPremium": 12000,
+      "paymentFrequency": "Annually",
+      "startDate": "2026-01-15",
+      "endDate": "2027-01-14",
+      "status": "Active",
+      "nominee": "Demo Nominee",
+      "createdDate": "2026-01-15T10:30:00Z"
+    },
+    {
+      "id": "POL-2026-002",
+      "productId": "PROD-102",
+      "productName": "AutoProtect Comprehensive",
+      "policyHolderId": "USR-003",
+      "policyHolderName": "Jamie Customer",
+      "agentId": "USR-002",
+      "agentName": "Alex Agent",
+      "sumInsured": 850000,
+      "annualPremium": 18500,
+      "paymentFrequency": "Annually",
+      "startDate": "2026-02-01",
+      "endDate": "2027-01-31",
+      "status": "Active",
+      "vehicleNumber": "DEMO-0000",
+      "createdDate": "2026-02-01T14:15:00Z"
+    },
+    {
+      "id": "POL-2026-003",
+      "productId": "PROD-103",
+      "productName": "Term Life Secure 360",
+      "policyHolderId": "USR-005",
+      "policyHolderName": "Riley Customer",
+      "agentId": "USR-002",
+      "agentName": "Alex Agent",
+      "sumInsured": 5000000,
+      "annualPremium": 22000,
+      "paymentFrequency": "Quarterly",
+      "startDate": "2026-03-10",
+      "endDate": "2036-03-09",
+      "status": "Active",
+      "nominee": "Demo Nominee",
+      "createdDate": "2026-03-10T11:00:00Z"
+    },
+    {
+      "id": "POL-2026-004",
+      "productId": "PROD-104",
+      "productName": "Home & Property Guardian",
+      "policyHolderId": "USR-005",
+      "policyHolderName": "Riley Customer",
+      "agentId": "USR-002",
+      "agentName": "Alex Agent",
+      "sumInsured": 3000000,
+      "annualPremium": 9500,
+      "paymentFrequency": "Annually",
+      "startDate": "2025-05-01",
+      "endDate": "2026-04-30",
+      "status": "Pending Renewal",
+      "propertyAddress": "Example Property, Sample City",
+      "createdDate": "2025-05-01T09:00:00Z"
+    },
+    {
+      "id": "POL-2026-005",
+      "productId": "PROD-101",
+      "productName": "Health Shield Platinum",
+      "policyHolderId": "USR-003",
+      "policyHolderName": "Jamie Customer",
+      "agentId": "USR-002",
+      "agentName": "Alex Agent",
+      "sumInsured": 750000,
+      "annualPremium": 16000,
+      "paymentFrequency": "Annually",
+      "startDate": "2026-11-05",
+      "endDate": "2027-01-01",
+      "status": "Active",
+      "nominee": "Demo Nominee",
+      "vehicleNumber": null,
+      "propertyAddress": null,
+      "createdDate": "2026-11-05T07:05:50.615Z"
+    }
+  ],
+  "premiums": [
+    {
+      "id": "PRM-9001",
+      "policyId": "POL-2026-001",
+      "policyHolderId": "USR-003",
+      "policyHolderName": "Jamie Customer",
+      "amount": 12000,
+      "dueDate": "2026-01-15",
+      "paidDate": "2026-01-15T11:00:00Z",
+      "paymentMode": "Net Banking",
+      "transactionRef": "TXN-NB-883492",
+      "receiptNumber": "REC-2026-101",
+      "status": "Paid"
+    },
+    {
+      "id": "PRM-9002",
+      "policyId": "POL-2026-002",
+      "policyHolderId": "USR-003",
+      "policyHolderName": "Jamie Customer",
+      "amount": 18500,
+      "dueDate": "2026-02-01",
+      "paidDate": "2026-02-01T15:20:00Z",
+      "paymentMode": "Credit Card",
+      "transactionRef": "TXN-CC-491203",
+      "receiptNumber": "REC-2026-102",
+      "status": "Paid"
+    },
+    {
+      "id": "PRM-9003",
+      "policyId": "POL-2026-003",
+      "policyHolderId": "USR-005",
+      "policyHolderName": "Riley Customer",
+      "amount": 5500,
+      "dueDate": "2026-03-10",
+      "paidDate": "2026-03-10T12:45:00Z",
+      "paymentMode": "UPI",
+      "transactionRef": "TXN-UPI-938174",
+      "receiptNumber": "REC-2026-103",
+      "status": "Paid"
+    },
+    {
+      "id": "PRM-9004",
+      "policyId": "POL-2026-003",
+      "policyHolderId": "USR-005",
+      "policyHolderName": "Riley Customer",
+      "amount": 5500,
+      "dueDate": "2026-06-10",
+      "paidDate": "2026-11-05T07:05:50.617Z",
+      "paymentMode": "Net Banking",
+      "transactionRef": "TXN-PAY-204425",
+      "receiptNumber": "REC-2026-632",
+      "status": "Paid"
+    },
+    {
+      "id": "PRM-9005",
+      "policyId": "POL-2026-004",
+      "policyHolderId": "USR-005",
+      "policyHolderName": "Riley Customer",
+      "amount": 9500,
+      "dueDate": "2026-04-30",
+      "paidDate": null,
+      "paymentMode": null,
+      "transactionRef": null,
+      "receiptNumber": null,
+      "status": "Overdue"
+    },
+    {
+      "id": "PRM-9891",
+      "policyId": "POL-2026-005",
+      "policyHolderId": "USR-003",
+      "policyHolderName": "Jamie Customer",
+      "amount": 16000,
+      "dueDate": "2026-11-05",
+      "paidDate": "2026-11-05T07:05:50.615Z",
+      "paymentMode": "Net Banking",
+      "transactionRef": "TXN-INIT-286967",
+      "receiptNumber": "REC-2026-921",
+      "status": "Paid"
+    }
+  ],
+  "claims": [
+    {
+      "id": "CLM-2026-001",
+      "policyId": "POL-2026-001",
+      "productName": "Health Shield Platinum",
+      "policyHolderId": "USR-003",
+      "policyHolderName": "Jamie Customer",
+      "incidentDate": "2026-03-01",
+      "claimAmount": 45000,
+      "incidentType": "Example insurance claim",
+      "description": "Example claim details for demonstration only.",
+      "hospitalName": "Example Provider",
+      "documents": [
+        {
+          "name": "Example supporting document.pdf",
+          "size": "1.2 MB",
+          "type": "application/pdf",
+          "uploadDate": "2026-03-04"
+        },
+        {
+          "name": "Example supporting document.pdf",
+          "size": "850 KB",
+          "type": "application/pdf",
+          "uploadDate": "2026-03-04"
+        }
+      ],
+      "status": "Settled",
+      "submissionDate": "2026-03-04T09:30:00Z",
+      "assignedOfficerId": "USR-004",
+      "assignedOfficerName": "Casey Officer",
+      "reviewNotes": "Example review notes for demonstration only.",
+      "settledAmount": 38000,
+      "settlementDate": "2026-11-05T07:05:50.617Z",
+      "settlementTransactionRef": "SET-NEFT-991122"
+    },
+    {
+      "id": "CLM-2026-002",
+      "policyId": "POL-2026-002",
+      "productName": "AutoProtect Comprehensive",
+      "policyHolderId": "USR-003",
+      "policyHolderName": "Jamie Customer",
+      "incidentDate": "2026-03-18",
+      "claimAmount": 32000,
+      "incidentType": "Example insurance claim",
+      "description": "Example claim details for demonstration only.",
+      "hospitalName": "Example Provider",
+      "documents": [
+        {
+          "name": "Example supporting document.pdf",
+          "size": "2.4 MB",
+          "type": "image/jpeg",
+          "uploadDate": "2026-03-19"
+        },
+        {
+          "name": "Example supporting document.pdf",
+          "size": "650 KB",
+          "type": "application/pdf",
+          "uploadDate": "2026-03-19"
+        }
+      ],
+      "status": "Approved",
+      "submissionDate": "2026-03-19T14:10:00Z",
+      "assignedOfficerId": "USR-004",
+      "assignedOfficerName": "Casey Officer",
+      "reviewNotes": "Example review notes for demonstration only.",
+      "settledAmount": 30000,
+      "settlementDate": "2026-03-21T11:30:00Z",
+      "settlementTransactionRef": "PENDING-DISBURSEMENT"
+    },
+    {
+      "id": "CLM-2026-003",
+      "policyId": "POL-2026-001",
+      "productName": "Health Shield Platinum",
+      "policyHolderId": "USR-003",
+      "policyHolderName": "Jamie Customer",
+      "incidentDate": "2026-04-02",
+      "claimAmount": 15000,
+      "incidentType": "Example insurance claim",
+      "description": "Example claim details for demonstration only.",
+      "hospitalName": "Example Provider",
+      "documents": [
+        {
+          "name": "Example supporting document.pdf",
+          "size": "420 KB",
+          "type": "application/pdf",
+          "uploadDate": "2026-04-03"
+        }
+      ],
+      "status": "Rejected",
+      "submissionDate": "2026-04-03T10:00:00Z",
+      "assignedOfficerId": "USR-004",
+      "assignedOfficerName": "Casey Officer",
+      "reviewNotes": "Example review notes for demonstration only.",
+      "settledAmount": 0,
+      "settlementDate": "2026-04-04T15:00:00Z",
+      "settlementTransactionRef": "N/A"
+    },
+    {
+      "id": "CLM-2026-004",
+      "policyId": "POL-2026-004",
+      "productName": "Home & Property Guardian",
+      "policyHolderId": "USR-005",
+      "policyHolderName": "Riley Customer",
+      "incidentDate": "2026-04-10",
+      "claimAmount": 65000,
+      "incidentType": "Example insurance claim",
+      "description": "Example claim details for demonstration only.",
+      "hospitalName": "Example Provider",
+      "documents": [
+        {
+          "name": "Example supporting document.pdf",
+          "size": "3.1 MB",
+          "type": "application/pdf",
+          "uploadDate": "2026-04-11"
+        },
+        {
+          "name": "Example supporting document.pdf",
+          "size": "910 KB",
+          "type": "application/pdf",
+          "uploadDate": "2026-04-11"
+        }
+      ],
+      "status": "Under Review",
+      "submissionDate": "2026-04-11T16:20:00Z",
+      "assignedOfficerId": "USR-004",
+      "assignedOfficerName": "Casey Officer",
+      "reviewNotes": "Example review notes for demonstration only.",
+      "settledAmount": 0,
+      "settlementDate": null,
+      "settlementTransactionRef": null
+    },
+    {
+      "id": "CLM-2026-005",
+      "policyId": "POL-2026-003",
+      "productName": "Term Life Secure 360",
+      "policyHolderId": "USR-005",
+      "policyHolderName": "Riley Customer",
+      "incidentDate": "2026-04-20",
+      "claimAmount": 50000,
+      "incidentType": "Example insurance claim",
+      "description": "Example claim details for demonstration only.",
+      "hospitalName": "Example Provider",
+      "documents": [
+        {
+          "name": "Example supporting document.pdf",
+          "size": "1.8 MB",
+          "type": "application/pdf",
+          "uploadDate": "2026-04-22"
+        }
+      ],
+      "status": "Submitted",
+      "submissionDate": "2026-04-22T08:45:00Z",
+      "assignedOfficerId": null,
+      "assignedOfficerName": "Unassigned",
+      "reviewNotes": "Example review notes for demonstration only.",
+      "settledAmount": 0,
+      "settlementDate": null,
+      "settlementTransactionRef": null
+    },
+    {
+      "id": "CLM-2026-006",
+      "policyId": "POL-2026-001",
+      "productName": "Health Shield Platinum",
+      "policyHolderId": "USR-003",
+      "policyHolderName": "Jamie Customer",
+      "incidentDate": "2026-05-02",
+      "claimAmount": 28000,
+      "incidentType": "Example insurance claim",
+      "description": "Example claim details for demonstration only.",
+      "hospitalName": "Example Provider",
+      "documents": [
+        {
+          "name": "Example supporting document.pdf",
+          "size": "1.5 MB",
+          "type": "application/pdf",
+          "uploadDate": "2026-11-05"
+        }
+      ],
+      "status": "Submitted",
+      "submissionDate": "2026-11-05T07:05:50.616Z",
+      "assignedOfficerId": null,
+      "assignedOfficerName": "Unassigned",
+      "reviewNotes": "Example review notes for demonstration only.",
+      "settledAmount": 0,
+      "settlementDate": null,
+      "settlementTransactionRef": null
+    }
+  ],
+  "auditLogs": [
+    {
+      "id": "LOG-9349",
+      "timestamp": "2026-11-09T12:28:09.349Z",
+      "user": "Demo Administrator",
+      "action": "ACCOUNT_LOGIN",
+      "details": "Signed in as Admin"
+    },
+    {
+      "id": "LOG-8550",
+      "timestamp": "2026-11-09T12:27:18.550Z",
+      "user": "Demo Administrator",
+      "action": "ACCOUNT_REGISTERED",
+      "details": "New Admin account registered: admin@example.com"
+    },
+    {
+      "id": "LOG-0617",
+      "timestamp": "2026-11-05T07:05:50.617Z",
+      "user": "Casey Officer",
+      "action": "CLAIM_SETTLED",
+      "details": "Claim CLM-2026-001 marked Settled. Settled: ₹38000"
+    },
+    {
+      "id": "LOG-0617",
+      "timestamp": "2026-11-05T07:05:50.617Z",
+      "user": "Riley Customer",
+      "action": "PREMIUM_PAID",
+      "details": "Collected ₹5500 for POL-2026-003 via Net Banking"
+    },
+    {
+      "id": "LOG-0616",
+      "timestamp": "2026-11-05T07:05:50.616Z",
+      "user": "Jamie Customer",
+      "action": "CLAIM_SUBMITTED",
+      "details": "Filed claim CLM-2026-006 for ₹28000 under POL-2026-001"
+    },
+    {
+      "id": "LOG-0615",
+      "timestamp": "2026-11-05T07:05:50.615Z",
+      "user": "Alex Agent",
+      "action": "POLICY_ISSUED",
+      "details": "Issued policy POL-2026-005 (Health Shield Platinum) to Jamie Customer"
+    },
+    {
+      "id": "LOG-1001",
+      "timestamp": "2026-01-15T10:30:00Z",
+      "user": "Alex Agent (Policy Agent)",
+      "action": "POLICY_ISSUED",
+      "details": "Issued Health Shield Platinum POL-2026-001 to Jamie Customer."
+    },
+    {
+      "id": "LOG-1002",
+      "timestamp": "2026-01-15T11:00:00Z",
+      "user": "Jamie Customer (Policy Holder)",
+      "action": "PREMIUM_PAID",
+      "details": "Paid ₹12,000 for POL-2026-001 via Net Banking (Ref: TXN-NB-883492)."
+    },
+    {
+      "id": "LOG-1003",
+      "timestamp": "2026-03-04T09:30:00Z",
+      "user": "Jamie Customer (Policy Holder)",
+      "action": "CLAIM_SUBMITTED",
+      "details": "Submitted claim CLM-2026-001 for ₹45,000 against POL-2026-001."
+    },
+    {
+      "id": "LOG-1004",
+      "timestamp": "2026-03-08T16:00:00Z",
+      "user": "Casey Officer (Claims Officer)",
+      "action": "CLAIM_SETTLED",
+      "details": "Settled claim CLM-2026-001 for ₹40,000. NEFT Ref: SET-NEFT-789012."
+    },
+    {
+      "id": "LOG-1005",
+      "timestamp": "2026-04-04T15:00:00Z",
+      "user": "Casey Officer (Claims Officer)",
+      "action": "CLAIM_REJECTED",
+      "details": "Rejected claim CLM-2026-003. Reason: Dental cosmetic procedure excluded."
+    }
+  ],
+  "accounts": []
+}

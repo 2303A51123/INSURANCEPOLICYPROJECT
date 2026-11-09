@@ -1,0 +1,23 @@
+# Dependencies
+node_modules/
+
+# Environment files
+.env
+.env.local
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+
+# Runtime data
+backend/uploads/*
+!backend/uploads/.gitkeep
+
+# Operating System files
+.DS_Store
+Thumbs.db
+
+# IDE files
+.vscode/
+.idea/

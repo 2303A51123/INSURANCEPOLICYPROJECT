@@ -1,0 +1,26 @@
+{
+  "name": "insurance-policy-claims-system",
+  "version": "1.0.0",
+  "description": "Insurance Policy and Claims Management System - DevOps & Full Stack Project",
+  "author": "PUVATI VAMSHI VARDHAN RAO (Enrolment No: 2303A51123)",
+  "main": "run.js",
+  "scripts": {
+    "start": "node run.js",
+    "dev": "node run.js",
+    "test": "node tests/api.test.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.19.2",
+    "multer": "^1.4.5-lts.1"
+  },
+  "keywords": [
+    "insurance",
+    "claims-management",
+    "devops",
+    "docker",
+    "kubernetes",
+    "full-stack"
+  ],
+  "license": "ISC"
+}
